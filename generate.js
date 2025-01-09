@@ -1,6 +1,7 @@
 
 import { join } from 'node:path';
 import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
+import redirect from './templates/redirect.js';
 
 const srcDir = '/Users/robin/Data/twitter-2024-11-14';
 const outDir = rel('site');
@@ -15,15 +16,15 @@ const threads = [
 // profile
 const name = 'Robin Berjon';
 const user = 'robinberjon';
-const account = await loadData('account');
-const profile = await loadData('profile');
+const account = (await loadData('account'))[0];
+const profile = (await loadData('profile'))[0];
 const accountID = account.accountId;
-const avatarSrc = join(srcDir, 'profile_media', `${accountID}-${profile.avatarMediaUrl.replace(/,*\//, '')}`);
+const avatarSrc = join(srcDir, 'data/profile_media', `${accountID}-${profile.avatarMediaUrl.replace(/.*\//, '')}`);
 await mkdir(mediaDir, { recursive: true });
 await cp(avatarSrc, join(mediaDir, 'avatar.jpg'), { force: true });
 const avatarURL = '/media/avatar.jpg';
 
-const tweets = await loadData('tweets');
+const tweets = await loadData('tweets', 'tweet');
 const tweetMap = {};
 const replyMap = {};
 
@@ -35,8 +36,6 @@ tweets.forEach(t => {
     replyMap[id].push(t.id_str);
   }
 });
-console.warn(`TWMP: ${Object.keys(tweetMap).length}`);
-console.warn(`RPMP: ${Object.keys(replyMap).length}`);
 
 const threadMessages = {};
 threads.forEach(id => {
@@ -49,7 +48,15 @@ threads.forEach(id => {
   }
 });
 
-// redirect pages
+for (const top of Object.keys(threadMessages)) {
+  const submessages = threadMessages[top];
+  // redirect pages
+  for (const id of submessages) {
+    if (id === top) continue;
+    const page = redirect({ top, id });
+    await writeFile(join(outDir, `${id}.html`), page, 'utf8');
+  }
+}
 
 // XXX
 // - for each ID, if it's not the top generate a page that just redirects to the top+#tweet-id
@@ -59,11 +66,12 @@ threads.forEach(id => {
 // - sometimes images are mp4s (have to check the extension), that's for gifs (poster is given, don't autoplay)
 
 
-async function loadData (key) {
+async function loadData (key, dataKey) {
+  if (!dataKey) dataKey = key;
   return JSON.parse(
       (await readFile(join(srcDir, `data/${key}.js`), 'utf8')).replace(`window.YTD.${key}.part0 = `, '')
     )
-    .map(t => t[key])
+    .map(t => t[dataKey])
   ;
 }
 
