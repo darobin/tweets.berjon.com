@@ -2,6 +2,8 @@
 import { join } from 'node:path';
 import { readFile, writeFile, mkdir, cp } from 'node:fs/promises';
 import redirect from './templates/redirect.js';
+import post from './templates/post.js';
+import threadPage from './templates/thread-page.js';
 
 const srcDir = '/Users/robin/Data/twitter-2024-11-14';
 const outDir = rel('site');
@@ -14,8 +16,6 @@ const threads = [
 ];
 
 // profile
-const name = 'Robin Berjon';
-const user = 'robinberjon';
 const account = (await loadData('account'))[0];
 const profile = (await loadData('profile'))[0];
 const accountID = account.accountId;
@@ -56,10 +56,26 @@ for (const top of Object.keys(threadMessages)) {
     const page = redirect({ top, id });
     await writeFile(join(outDir, `${id}.html`), page, 'utf8');
   }
+
+  // generate the big thread
+  const content = submessages
+    .map(id => {
+      return post({
+        id,
+        avatarURL,
+        date: tweetMap[id].created_at,
+      });
+    })
+    .join('\n')
+  ;
+  const page = threadPage({
+    title: `Thread for ${top}`,
+    content,
+  });
+  await writeFile(join(outDir, `${top}.html`), page, 'utf8');
 }
 
 // XXX
-// - for each ID, if it's not the top generate a page that just redirects to the top+#tweet-id
 // - generate the big thread for each
 // - include images, copy them over
 // - process entities for links, hashtags, mentions

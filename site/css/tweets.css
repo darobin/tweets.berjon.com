@@ -1,0 +1,51 @@
+
+:root {
+  --light-mark: #e4e8ed;
+  --mid-mark: #cad2da;
+}
+main {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 0 0.5rem;
+  border-left: 1px solid var(--light-mark);
+  border-right: 1px solid var(--light-mark);
+}
+section {
+  display: flex;
+}
+.avatar {
+  padding: 1rem 0;
+  width: 42px;
+  background: linear-gradient(to right, #fff, #fff 19px, #cad2da 20px, #cad2da 21px, #fff 22px);
+}
+.avatar img {
+  width: 100%;
+  border-radius: 50%;
+}
+.avatar a {
+  display: inline-flex;
+  border-bottom: #fff solid 5px;
+  border-top: #fff solid 5px;
+}
+.post {
+  flex-grow: 1;
+}
+.meta {
+  padding: 1rem 0 4px 0;
+}
+.meta a:nth-child(1) {
+  text-decoration: none;
+  font-weight: bold;
+  color: inherit;
+}
+.meta a:nth-child(2) {
+  text-decoration: none;
+  color: var(--mid-mark);
+}
+.meta a:nth-child(3) {
+  text-decoration: none;
+  color: var(--mid-mark);
+}
+.meta a:hover {
+  text-decoration: underline;
+}
