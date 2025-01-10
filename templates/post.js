@@ -42,7 +42,7 @@ function markTextUp (id, text, entities, extendedEntities, needsCopying) {
           let url = m.expanded_url;
           let display = m.display_url;
           if (/https:\/\/twitter\.com\/robinberjon\/status\/\d+/.test(url)) {
-            display = url.replace(/.*\//, 'https://tweets.berjon.com/');
+            display = url.replace(/.*\//, 'https://tweets.berjon.com/').replace(/\?.*/, '').replace(/#.*/, '');
             url = display + '.html';
           }
           return `${pfx}<a href="${url}">${display}</a>`;
