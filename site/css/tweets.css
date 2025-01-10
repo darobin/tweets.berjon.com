@@ -1,7 +1,24 @@
 
+@font-face {
+  font-family: 'InterVariable';
+  src: url("Inter-Variable.ttf");
+  font-weight: 300 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'InterVariableItalic';
+  src: url("Inter-Italic-Variable.ttf");
+  font-weight: 300 1000;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --light-mark: #e4e8ed;
   --mid-mark: #cad2da;
+  --slight-shade: rgb(66, 87, 108);
+  font-family: InterVariable, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 main {
   margin: 0 auto;
@@ -16,6 +33,7 @@ section {
 .avatar {
   padding: 1rem 0;
   width: 42px;
+  min-width: 42px;
   background: linear-gradient(to right, #fff, #fff 19px, #cad2da 20px, #cad2da 21px, #fff 22px);
 }
 .avatar img {
@@ -29,22 +47,27 @@ section {
 }
 .post {
   flex-grow: 1;
+  margin-left: 12px;
 }
 .meta {
-  padding: 1rem 0 4px 0;
+  padding:calc(1rem + 5px) 0 4px 0;
+  letter-spacing: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-variant: no-contextual;
 }
 .meta a:nth-child(1) {
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
   color: inherit;
 }
 .meta a:nth-child(2) {
   text-decoration: none;
-  color: var(--mid-mark);
+  color: var(--slight-shade);
 }
 .meta a:nth-child(3) {
   text-decoration: none;
-  color: var(--mid-mark);
+  color: var(--slight-shade);
 }
 .meta a:hover {
   text-decoration: underline;

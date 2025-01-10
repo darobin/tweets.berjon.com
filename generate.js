@@ -19,8 +19,8 @@ const threads = [
 const account = (await loadData('account'))[0];
 const profile = (await loadData('profile'))[0];
 const accountID = account.accountId;
-const avatarSrc = join(srcDir, 'data/profile_media', `${accountID}-${profile.avatarMediaUrl.replace(/.*\//, '')}`);
 await mkdir(mediaDir, { recursive: true });
+const avatarSrc = join(srcDir, 'data/profile_media', `${accountID}-${profile.avatarMediaUrl.replace(/.*\//, '')}`);
 await cp(avatarSrc, join(mediaDir, 'avatar.jpg'), { force: true });
 const avatarURL = '/media/avatar.jpg';
 
@@ -58,12 +58,18 @@ for (const top of Object.keys(threadMessages)) {
   }
 
   // generate the big thread
+  const needsCopying = [];
   const content = submessages
     .map(id => {
+      const t = tweetMap[id];
       return post({
         id,
         avatarURL,
-        date: tweetMap[id].created_at,
+        date: t.created_at,
+        text: t.full_text,
+        entities: t.entities,
+        extendedEntities: t.extended_entities,
+        needsCopying,
       });
     })
     .join('\n')
@@ -73,14 +79,10 @@ for (const top of Object.keys(threadMessages)) {
     content,
   });
   await writeFile(join(outDir, `${top}.html`), page, 'utf8');
+  for (const m of needsCopying) {
+    await cp(join(srcDir, 'data/tweets_media', m), join(mediaDir, m), { force: true });
+  }
 }
-
-// XXX
-// - generate the big thread for each
-// - include images, copy them over
-// - process entities for links, hashtags, mentions
-// - sometimes images are mp4s (have to check the extension), that's for gifs (poster is given, don't autoplay)
-
 
 async function loadData (key, dataKey) {
   if (!dataKey) dataKey = key;
