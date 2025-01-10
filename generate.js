@@ -75,7 +75,7 @@ for (const top of Object.keys(threadMessages)) {
     .join('\n')
   ;
   const page = threadPage({
-    title: `Thread for ${top}`,
+    title: `Robin Berjon: "${tweetMap[top].full_text.replace(/&lt;/g, '<').replace(/&amp;/g, '&')}"`,
     content,
   });
   await writeFile(join(outDir, `${top}.html`), page, 'utf8');
