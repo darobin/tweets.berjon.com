@@ -37,14 +37,25 @@ function markTextUp (id, text, entities, extendedEntities, needsCopying) {
       if (!rx.test(text)) console.warn(`Failed to match ${id} with ${rx}`);
       text = text.replace(rx, (_, pfx, str) => {
         // console.warn(m.indices[0], m.indices[1], `${pfx} -> ${str}`);
-        if (m.kind === 'urls') return `${pfx}<a href="${m.expanded_url}">${m.display_url}</a>`;
+        if (m.kind === 'urls') {
+          // https://twitter.com/robinberjon/status/1477498379047473153
+          let url = m.expanded_url;
+          let display = m.display_url;
+          if (/https:\/\/twitter\.com\/robinberjon\/status\/\d+/.test(url)) {
+            display = url.replace(/.*\//, 'https://tweets.berjon.com/');
+            url = display + '.html';
+          }
+          return `${pfx}<a href="${url}">${display}</a>`;
+        }
         if (m.kind === 'hashtags') return `${pfx}<a href="https://bsky.app/hashtag/${m.text}">${str}</a>`;
+        // People who xited before this archive don't show up as mentions in the export.
+        // We could detect and fix.
         if (m.kind === 'user_mentions') return `${pfx}<a href="https://duckduckgo.com/?q=${encodeURIComponent(m.name)}" title="${m.name}">${str}</a>`;
         if (m.kind === 'media') {
           if (m.type === 'animated_gif') {
             const src = `${id}-${m.video_info.variants[0].url.replace(/.*\//, '')}`;
             needsCopying.push(src);
-            return `${pfx}<video src="/media/${src}" width="${m.sizes.large.w}" height="${m.sizes.large.h}" disablepictureinpicture loop playsinline></video>`;
+            return `${pfx}<video src="/media/${src}" width="${m.sizes.large.w}" height="${m.sizes.large.h}" autoplay preload="auto" disablepictureinpicture loop playsinline></video>`;
           }
           if (m.type === 'photo') {
             const src = `${id}-${m.media_url_https.replace(/.*\//, '')}`;

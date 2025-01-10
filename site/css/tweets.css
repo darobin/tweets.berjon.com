@@ -13,19 +13,55 @@
   font-style: italic;
   font-display: swap;
 }
+@font-face {
+  font-family: "Catamaran";
+  font-style: normal;
+  src: url("Catamaran-VariableFont_wght.ttf")
+}
 
 :root {
   --light-mark: #e4e8ed;
   --mid-mark: #cad2da;
   --slight-shade: rgb(66, 87, 108);
+  --blue-skies: rgb(16, 131, 254);
   font-family: InterVariable, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+header {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 1rem 0.5rem;
+  background: var(--blue-skies);
+  color: #fff;
+  border-left: 1px solid var(--blue-skies);
+  border-right: 1px solid var(--blue-skies);
+}
+header h1 {
+  font-family: Catamaran;
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 0;
+}
+header p {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 5px;
+  margin-top: -12px;
+  margin-left: 4px;
 }
 main {
   margin: 0 auto;
   max-width: 600px;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 4rem  0.5rem;
   border-left: 1px solid var(--light-mark);
   border-right: 1px solid var(--light-mark);
+  border-bottom: 1px solid var(--light-mark);
 }
 section {
   display: flex;
@@ -71,4 +107,29 @@ section {
 }
 .meta a:hover {
   text-decoration: underline;
+}
+.content {
+  font-size: 15px;
+  padding-right: 8px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.content img, .content video {
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+  border-radius: 12px;
+}
+.content a {
+  text-decoration: none;
+  color: var(--blue-skies);
+}
+section:first-of-type .avatar {
+  padding: 0;
+}
+section:first-of-type .meta {
+  padding-top: 5px;
+}
+section:last-of-type .avatar {
+  background: none;
 }
