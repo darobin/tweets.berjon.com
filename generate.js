@@ -57,10 +57,6 @@ for (const top of Object.keys(threadMessages)) {
     await writeFile(join(outDir, `${id}.html`), page, 'utf8');
   }
 
-  // XXX
-  // - polity.json
-  // - Caddy
-
   // generate the big thread
   const needsCopying = [];
   const content = submessages

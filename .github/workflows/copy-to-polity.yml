@@ -19,7 +19,7 @@ jobs:
           username: root
           passphrase: ${{ secrets.PASSWORD }}
           key: ${{ secrets.KEY }}
-          source: "*,!README.md,!LICENSE,!optimise-pdf.sh,!.git,!.github,!.gitignore,polity.json"
+          source: "site/*,!README.md,!LICENSE,!optimise-pdf.sh,!.git,!.github,!.gitignore,polity.json"
           target: "/var/www/tweets.berjon.com/"
           rm: true
       - name: chown to robin
