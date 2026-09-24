@@ -2,31 +2,35 @@
   "name": "tweets.berjon.com",
   "type": "module",
   "private": true,
-  "version": "0.0.1",
-  "description": "The archive of my tweets",
+  "version": "0.1.0",
+  "description": "The archive of my tweets — a static site generated from a Twitter export",
   "author": "Robin Berjon <robin@berjon.com>",
   "license": "Apache-2.0",
-  "scripts": {},
-  "bin": {},
+  "scripts": {
+    "build": "node build/index.js",
+    "bundle": "node build/bundle.js",
+    "bundle:watch": "node build/bundle.js --watch",
+    "serve": "node build/serve.js",
+    "dev": "npm run build && node build/serve.js",
+    "publish:site": "node build/publish.js",
+    "sm:deploy": "cd deploy && sm deploy"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/darobin/tweets.berjon.com.git"
   },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "mocha": true,
-      "es2021": true
-    },
-    "extends": "eslint:recommended",
-    "overrides": [],
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {}
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@lit-labs/signals": "^0.2.0",
+    "lit": "^3.3.2",
+    "refrakt": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.26.0"
+    "esbuild": "^0.25.0"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
   }
 }

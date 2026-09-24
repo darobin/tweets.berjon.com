@@ -1,0 +1,9 @@
+{
+  "name": "tweets-berjon-com",
+  "type": "static",
+  "domains": {
+    "local": ["tweets.berjon.bast"],
+    "prod": ["tweets.berjon.com"]
+  },
+  "data": true
+}

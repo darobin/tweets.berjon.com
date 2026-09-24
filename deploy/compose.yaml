@@ -1,0 +1,14 @@
+services:
+  tweets-berjon-com:
+    build: .
+    restart: unless-stopped
+    container_name: tweets-berjon-com
+    volumes:
+      - ${SM_DATA_ROOT:-/srv/supramundane/data}/tweets-berjon-com:/data
+    networks:
+      - default
+
+networks:
+  default:
+    name: supramundane
+    external: true

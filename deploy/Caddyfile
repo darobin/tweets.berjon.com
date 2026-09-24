@@ -1,0 +1,27 @@
+# Internal vhost — served only behind the supramundane front proxy.
+# Public domain, TLS, and privacy headers are handled by the front.
+:80 {
+	root * /data
+	encode zstd gzip
+
+	# Tweet permalinks are /<id>.html (and /<id> works too); listings are
+	# directories with an index.
+	try_files {path} {path}.html {path}/index.html
+
+	# Tweet media never changes; everything else is regenerated in place.
+	@media {
+		path /media/*
+		not path /media/avatar.jpg
+	}
+	header @media Cache-Control "public, max-age=31536000, immutable"
+	@assets path /css/* /js/* /search/*.json /media/avatar.jpg
+	header @assets Cache-Control "public, max-age=3600"
+
+	handle_errors {
+		@notfound expression {http.error.status_code} == 404
+		rewrite @notfound /404.html
+		file_server
+	}
+
+	file_server
+}
